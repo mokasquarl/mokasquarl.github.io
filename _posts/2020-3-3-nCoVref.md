@@ -3,7 +3,13 @@ layout: post
 title: Using SARS-CoV-2 Reference Genome to Align Outbreak Sequencing Data
 ---
 
-In this post we are taking the reference genome established by the CDC at() . To begin we need to index the reference FASTA file using samtools. 
+In this post we take the reference genome established by the CDC at https://www.ncbi.nlm.nih.gov/nuccore/1798174254 
+To begin we need to grab just the FASTA data and save it as a file under something like nCoVref.fasta
+Next we will use samtools to index this reference file. 
+git clone https://github.com/samtools/samtools.git
+samtools faidx nCoVref.fasta
+
+This creates our nCoVref.fasta.fai index.
 
 ![_config.yml]({{ site.baseurl }}/images/config.png)
 
