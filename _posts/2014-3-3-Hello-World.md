@@ -3,7 +3,7 @@ layout: post
 title: Using SARS-CoV-2 Reference Genome to Align Outbreak Sequencing Data
 ---
 
-In this post we are taking the reference genome established by the CDC at
+In this post we are taking the reference genome established by the CDC at() . To begin we need to index the reference FASTA file using samtools. 
 
 ![_config.yml]({{ site.baseurl }}/images/config.png)
 
