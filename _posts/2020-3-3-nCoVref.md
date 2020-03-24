@@ -8,6 +8,7 @@ In this post we take the reference genome established by the CDC: [Severe acute 
 Next we will use samtools to index this reference file.
 
     git clone https://github.com/samtools/samtools.git
+    
     cd samtools
     ./configure
     make
@@ -15,7 +16,13 @@ Next we will use samtools to index this reference file.
     
     samtools faidx nCoVref.fasta
 
-This creates our nCoVref.fasta.fai index file, which will be useful in the coming steps. 
+This creates our nCoVref.fasta.fai index file, which will be useful later. To perform our actual alignment we are going to use the Burrow-Wheeler Aligner for short-reads, BWA. 
+
+    git clone https://github.com/lh3/bwa.git
+    cd bwa; make
+    ./bwa index nCoVref.fasta
+    
+BWA index created some additional files, like .bwt, .pac, .ann, and others. Now our reference genome is ready to align reads from sequencing data of patients from outbreaks.
 
 ![_config.yml]({{ site.baseurl }}/images/config.png)
 
