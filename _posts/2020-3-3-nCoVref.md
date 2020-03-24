@@ -22,9 +22,9 @@ This creates our nCoVref.fasta.fai index file, which will be useful later. To pe
     cd bwa; make
     ./bwa index nCoVref.fasta
     
-BWA index created some additional files, like .bwt, .pac, .ann, and others. Now our reference genome is ready to align reads from sequencing data of patients from outbreaks. We are going to use isolate raw read files from the Washington SARS-CoV-2 outbreak uploaded to the [Sequence Read Archive.](https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR11278092)To retrieve this data we need to use the SRA Toolkit, whose compiled binaries/install scripts of February 26, 2020 can be [Here](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=software). Once installed we grab our reads:
+BWA index created some additional files, like .bwt, .pac, .ann, and others. Now our reference genome is ready to align reads from sequencing data of patients from outbreaks. We are going to use isolate raw read files from the Washington SARS-CoV-2 outbreak uploaded to the [Sequence Read Archive.](https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR11278092)To retrieve this data we need to use the SRA Toolkit, whose compiled binaries/install scripts of February 26, 2020 can be found [Here](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=software). Once installed we grab our reads:
 
-    fastq-dump --outdir /path/ SRR11278092
+    ./fastq-dump --outdir /path/ SRR11278092
 
 
 
