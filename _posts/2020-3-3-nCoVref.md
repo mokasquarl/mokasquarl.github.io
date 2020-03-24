@@ -8,6 +8,10 @@ In this post we take the reference genome established by the CDC: [Severe acute 
 Next we will use samtools to index this reference file.
 
 ''git clone https://github.com/samtools/samtools.git
+cd samtools
+./configure
+    make
+    make install
 samtools faidx nCoVref.fasta''
 
 This creates our nCoVref.fasta.fai index. 
