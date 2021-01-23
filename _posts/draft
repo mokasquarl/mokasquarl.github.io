@@ -24,7 +24,15 @@ BWA takes **fastq** files containing samples, along with a *fasta* file containi
 
 ![gif of terminal commands running the alignment ](/images/file.png "running bwa is super easy")
 
-In the animated terminal above we see the commands needed to create our mapped genome from our input files, including retriving the data from the databases . If you'd like to skip all that, we're hosting both the reference genome, and the completed alignment map over at [Lucid Align](https://lucidalign.com/#cov). We'll be using the ***bam** file to detect our mutations, and we can also browse the genome of this Washting state outbreak sample using any sequence alignment viewer.
+In the animated terminal above we see the commands needed to create our mapped genome from our input files, including retriving the data from the databases . If you'd like to skip all that, we're hosting both the reference genome, and the completed alignment map over at [Lucid Align](https://lucidalign.com/#cov). We'll be using the ***bam** file to detect our mutations, and we can also browse the genome of this Washington state outbreak sample using any sequence alignment viewer.
+
+But before going on to variant calling this first sample let's just prepare another sample while we're making these alignment maps. Let's do a more recent outbreak, from Kent, UK; which is far from Wuhan & the Washington sample, in both time & space. Retriving the samples from European Nucleotide Archive can be done from this [link](https://www.ebi.ac.uk/ena/browser/view/ERR4659819)or from the shell. 
+
+    git clone https://github.com/enasequence/enaBrowserTools.git
+    cd python3
+    enaDataGet.py -f fastq -m -d [output_directory] ERR4659819
+
+BWA
 
 In this post we use the reference genome established by the CDC: [Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome.](https://www.ncbi.nlm.nih.gov/nuccore/1798174254) To begin we need to grab just the *FASTA* data and save it as a file under something like **nCoVref.fasta** 
 
