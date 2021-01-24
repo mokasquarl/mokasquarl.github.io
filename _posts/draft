@@ -12,7 +12,7 @@ As the pandemic runs its course, tracking genetic mutations has gained mainstrea
 | All Species | All Species | Viral Only |
 | Open Access | Open Access | Private |
 
-Data from viruses sequenced all across the world are uploaded into one of several databases (Table 1), this data is generated directly from machines by Illumina, Oxford Nanopore, or Life Technologies. When turning the molecules in genetic code into digital files these machines create strings that can be a few hundered letters in length to several thousand, but never the enitre genome of the virus in a single string. A standardized file format called *fastq* holds all the strings from a single sample, including some quality data from the machine doing the sequencing. These strings are in no particular order, and first need to be mapped together to get the complete genome. Pretty much the standard way to create these genetic maps uses a technique invented in Palo Alto back in the early 90s by  Michael Burrows and David Wheeler. The *Burrows–Wheeler Transform* was mostly just used in data compression, until after 2010 when computational biologists began to use it to align genomes together.
+Data from viruses sequenced all across the world are uploaded into one of several databases (Table 1), this data is generated directly from machines by Illumina, Oxford Nanopore, or Life Technologies. When turning the molecules in genetic code into digital files these machines create strings that can be a few hundered letters in length to several thousand, but never the enitre genome of the virus in a single string. A standardized file format called *fastq* holds all the strings from a single sample, including some quality data from the machine doing the sequencing. These strings are in no particular order, and first need to be mapped together to get the complete genome. Pretty much the standard way to create these genetic maps uses a technique invented in Palo Alto back in the early 90s by  Michael Burrows and David Wheeler. The *Burrows–Wheeler Transform* was mostly just used in data compression, until around 2010 when computational biologists began to use it to align genomes together.
 
 Heng Li, now a professor at Harvard (amongst other things) has created the most commonly used alignment algorithm (amongst other things) with [BWA](https://github.com/lh3/bwa). This algorithm is super easy to use, and will get us results that are more than good enough. 
 
@@ -20,58 +20,29 @@ Heng Li, now a professor at Harvard (amongst other things) has created the most 
     cd bwa
     make
 
-BWA takes **fastq** files containing samples, along with a *fasta* file containing a reference gemone to map the strings contained in our **fastq** file (fig 1). Refernce genomes are usually put out by the scientific wing of a National Goverment, Regional Organizations, and some Universities. We'll get our Wuhan Coronavirus Refernce genome from the National Center for Biotechnology Information (https://www.ncbi.nlm.nih.gov/nuccore/1798174254)hosted by the US Federal government.A good sample to run against the Wuhan reference is Washington state outbreak that happened early in the US, the *fastq* data for this is also hosted by the NCBI at their Sequence Read Archive (https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR11278092). 
+BWA takes **fastq** files containing samples, along with a *fasta* file containing a reference gemone to map the strings contained in our **fastq** file (fig 1). Refernce genomes are usually put out by the scientific wing of a National Goverment, Regional Organizations, and some Universities. We'll get our Wuhan Coronavirus Refernce genome from the National Center for Biotechnology Information (https://www.ncbi.nlm.nih.gov/nuccore/1798174254)hosted by the US Federal government. A good sample to run against the Wuhan reference is the Washington state outbreak that happened early in the US, the *fastq* data for this is also hosted by the NCBI at their Sequence Read Archive (https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR11278092). 
 
 ![gif of terminal commands running the alignment ](/images/file.png "running bwa is super easy")
 
 In the animated terminal above we see the commands needed to create our mapped genome from our input files, including retriving the data from the databases . If you'd like to skip all that, we're hosting both the reference genome, and the completed alignment map over at [Lucid Align](https://lucidalign.com/#cov). We'll be using the ***bam** file to detect our mutations, and we can also browse the genome of this Washington state outbreak sample using any sequence alignment viewer.
 
-But before going on to variant calling this first sample let's just prepare another sample while we're making these alignment maps. Let's do a more recent outbreak, from Kent, UK; which is far from Wuhan & the Washington sample, in both time & space. Retriving the samples from European Nucleotide Archive can be done from this [link](https://www.ebi.ac.uk/ena/browser/view/ERR4659819)or from the shell. 
+But before going on to variant calling this first sample let's just prepare another sample while we're making these alignment maps. Let's do a more recent outbreak, from Kent, UK; which is far from Wuhan & the Washington sample, in both time & space. Retriving the samples from the European Nucleotide Archive can be done from this [link](https://www.ebi.ac.uk/ena/browser/view/ERR4659819)or from the shell. 
 
     git clone https://github.com/enasequence/enaBrowserTools.git
     cd python3
     enaDataGet.py -f fastq -m -d [output_directory] ERR4659819
 
-BWA
+Creating the mapped genome from the Kent, UK outbreak is done the exact same way as with the Washington state outbreak, and now both files can be browsed directly with an alignment viewer. More importantly now we can run the *variant detection* and see all the mutations in each of these samples compared to the original Wuhan reference genome. Variant callers are an area of hot development for folks working on bioinformatics algorithms & tools. Traditionally, Bayesian methods have been most reliable, but are hard-coded for specific organisms or need the settings dialed-in to get the correct sensitivity to specificity. This is so that we don't get too many false-positives, while at the same time don't miss any real mutations. In the last couple of years deep convolutional neural networks have really made a splash in variant calling, where now images are created almost similar to those we see from alignment viewers, and those images are used to train, and then have the neural network make the call on whether there is a mutation in a given section of the alignment map as we make our way down the entire map.
 
-In this post we use the reference genome established by the CDC: [Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome.](https://www.ncbi.nlm.nih.gov/nuccore/1798174254) To begin we need to grab just the *FASTA* data and save it as a file under something like **nCoVref.fasta** 
+![gif/video of magnolia running alignments ](/images/file.png "variant calling neural network")
 
-Next we will use samtools to index this reference file.
+Bayesian variant callers are fairly simple to install, whereas the DCNN callers will need, in our case Nvidia cuda drivers, and of course a machine with those GPUs. You could use [Magnolia](https://magnolia.sh/), the super-cool nerual network based caller that Leo van Driel helped write B-), but for this post we are going to use the built-in caller that comes with [*samtools*](http://www.htslib.org/download/) written by the previously mentioned Heng Li.
 
-    git clone https://github.com/samtools/samtools.git
-    
-    cd samtools
-    ./configure
-    make
-    make install
-    
-    ./samtools faidx nCoVref.fasta
+    bcftools mpileup -Ou -f <ref.fasta> <sample1.bam> | bcftools call -vmO z -o <study.vcf.gz>
 
-This creates our **nCoVref.fasta.fai** index file, which will be useful later. To perform our actual alignment we are going to use the Burrow-Wheeler Aligner for short-reads, BWA. 
+After running any variant caller, we're left with a *vcf* file, which is just a list of positions in a genome where the sample has a mutation compared to the reference, it might be good to just look at the file [format specifications](https://samtools.github.io/hts-specs/VCFv4.2.pdf) to understand how these *vcf* files will be used moving forward.
 
-    git clone https://github.com/lh3/bwa.git
-    cd bwa
-    make
-    ./bwa index nCoVref.fasta
-    
-BWA index created some additional files, like *.bwt, .pac, .ann*, and others. Now our reference genome is ready to align reads from sequencing data of patients from outbreaks. We are going to use isolate raw read files from the Washington SARS-CoV-2 outbreak uploaded to the [Sequence Read Archive.](https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR11278092)To retrieve this data we need to use the SRA Toolkit, whose compiled binaries/install scripts can be found [Here](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=software). Once installed we grab our reads:
 
-    ./fastq-dump --outdir /path SRR11278092
-    
-We should now have a **SRR11278092.fastq** file. Which can be used with our previously prepared nCoVref file.
-
-    ./bwa mem nCoVref.fasta SRR11278092.fastq > SARS-CoV-2_align.sam
-    ./samtools view -bS SRR11278092.sam | samtools sort - SARS-CoV-2_align_sorted
-    
-Our output from the last few steps should be a **SARS-CoV-2_align_sorted.bam** file. This file also needs to be indexed so that we can navigate it quickly:
-
-    ./samtools index SARS-CoV-2_align_sorted.bam
-    
-Samtools can be used to view the alignment maps just created:
-
-    ./samtools tview SARS-CoV-2_align_sorted.bam nCoVref.fasta
-
-![samtools tview](/images/tview.png "SARS-CoV-2 Aligned")
 
 Tview can be very slow and difficult to use for anything other than a quick look because terminal has a difficult time rendering all the charecters and colors. Below are two external tools we can use, including one that I work on. 
 [![Lucid Align](/images/lucid.png "SARS-CoV-2 Aligned MacOS")](https://lucidalign.com)
