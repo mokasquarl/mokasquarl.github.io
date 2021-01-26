@@ -40,7 +40,7 @@ Bayesian variant callers are fairly simple to install, whereas the DCNN callers 
 
     bcftools mpileup -Ou -f <ref.fasta> <sample1.bam> | bcftools call -vmO z -o <study.vcf.gz>
 
-After running any variant caller, we're left with a *vcf* file, which is just a list of positions in a genome where the sample has a mutation compared to the reference, it might be good to just look at the file [format specifications](https://samtools.github.io/hts-specs/VCFv4.2.pdf) to understand how these *vcf* files will be used moving forward.
+After running any variant caller, we're left with a *vcf* file, which is just a list of positions in a genome where the sample has a mutation compared to the reference, it might be good to just look at the file [format specifications](https://samtools.github.io/hts-specs/VCFv4.2.pdf) to understand how these *vcf* files will be used moving forward. 
 
 
 
