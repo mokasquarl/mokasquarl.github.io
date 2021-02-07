@@ -2,7 +2,7 @@
 layout: Post
 title: Burrows-Wheeler, Coronavirus, & Bayes
 ---
-[![cool 3d renderings showing mutant & normal virus spike structure ](/images/file.png "looks nice mang")]
+[![cool 3d renderings showing mutant & normal virus spike structure ](/images/comp_cap.png "looks nice mang")]
 | *Fig 1.* | Building a Bioinformatics Pipleline to Detect & Understand Coronavirus Mutations |
 |-------|--------|
 
