@@ -1,6 +1,6 @@
 ---
 layout: post
-youtubeId: hUxBG6bKTH8
+youtubeId: v5z5OV6UAVM
 title: Burrows-Wheeler, Coronavirus, & Bayes
 ---
 ### A Bioinformatics Pipleline to Detect & Understand COVID Mutants
