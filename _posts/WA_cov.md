@@ -1,5 +1,6 @@
 ---
 layout: post
+youtubeId: hUxBG6bKTH8
 title: Burrows-Wheeler, Coronavirus, & Bayes
 ---
 ### A Bioinformatics Pipleline to Detect & Understand COVID Mutants
@@ -32,6 +33,8 @@ But before going on to variant calling this first sample let's just prepare anot
     enaDataGet.py -f fastq -m -d [output_directory] ERR4659819
 
 Creating the mapped genome from the Kent, UK outbreak is done the exact same way as with the Washington state outbreak, and now both files can be browsed directly with an alignment viewer. More importantly now we can run the *variant detection* and see all the mutations in each of these samples compared to the original Wuhan reference genome. Variant callers are an area of hot development for folks working on bioinformatics algorithms & tools. Traditionally, Bayesian methods have been most reliable, but are hard-coded for specific organisms or need the settings dialed-in to get the correct sensitivity to specificity. This is so that we don't get too many false-positives, while at the same time don't miss any real mutations. In the last couple of years deep convolutional neural networks have really made a splash in variant calling, where now images are created almost similar to those we see from alignment viewers, and those images are used to train, and then have the neural network make the call on whether there is a mutation in a given section of the alignment map as we make our way down the entire map.
+
+{% include youtubePlayer.html id=page.youtubeId %}
 
 Bayesian variant callers are fairly simple to install, whereas the DCNN callers will need, in our case Nvidia cuda drivers, and of course a machine with those GPUs. You could use [Magnolia](https://magnolia.sh/), the super-cool nerual network based caller that Leo van Driel helped write B-), but for this post we are going to use the built-in caller that comes with [*samtools*](http://www.htslib.org/download/) written by the previously mentioned Heng Li.
 
