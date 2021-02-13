@@ -20,9 +20,9 @@ Data from viruses sequenced all across the world are uploaded into one of severa
 
 Heng Li, now a professor at Harvard (amongst other things) has created the most commonly used alignment algorithm (amongst other things) with [BWA](https://github.com/lh3/bwa). This algorithm is super easy to use, and will get us results that are more than good enough. 
 
-    git clone https://github.com/lh3/bwa.git
-    cd bwa
-    make
+    git clone https://github.com/lh3/bwa.git
+    cd bwa
+    make
 
 BWA takes **fastq** files containing samples, along with a *fasta* file containing a reference genome to map the strings contained in our **fastq** file (fig 1). Reference genomes are usually put out by the scientific wing of a National Government, Regional Organizations, and some Universities. We'll get our Wuhan Coronavirus Reference genome from the [National Center for Biotechnology Information](https://www.ncbi.nlm.nih.gov/nuccore/1798174254) hosted by the US Federal government. A good sample to run against the Wuhan reference is the Washington state outbreak that happened early in the US, the *fastq* data for this is also hosted by the NCBI at their [Sequence Read Archive](https://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR11278092). In the animated terminal above (Fig 2.) we see the commands needed to create our mapped genome from our input files, including retrieving the data from the databases . If you'd like to skip all that, we're hosting both the reference genome, and the completed alignment map over at [Lucid Align](https://lucidalign.com/#cov). We'll be using the ***bam** file to detect our mutations, and we can also browse the genome of this Washington state outbreak sample using any sequence alignment viewer.
 
@@ -31,9 +31,9 @@ BWA takes **fastq** files containing samples, along with a *fasta* file containi
 
 But before going on to variant calling this first sample let's just prepare another sample while we're making these alignment maps. Let's do a more recent outbreak, from Kent, UK; which is far from Wuhan & the Washington sample, in both time & space. Retrieving the samples from the European Nucleotide Archive can be done from this [link](https://www.ebi.ac.uk/ena/browser/view/ERR4659819) or from the shell. 
 
-    git clone https://github.com/enasequence/enaBrowserTools.git
-    cd python3
-    enaDataGet.py -f fastq -m -d [output_directory] ERR4659819
+    git clone https://github.com/enasequence/enaBrowserTools.git
+    cd python3
+    enaDataGet.py -f fastq -m -d [output_directory] ERR4659819
 
 Creating the mapped genome from the Kent, UK outbreak is done the exact same way as with the Washington state outbreak, and now both files can be browsed directly with an alignment viewer. More importantly now we can run the *variant detection* and see all the mutations in each of these samples compared to the original Wuhan reference genome. Variant callers are an area of hot development for folks working on bioinformatics algorithms & tools. Traditionally, Bayesian methods have been most reliable, but are hard-coded for specific organisms or need the settings dialed-in to get the correct sensitivity to specificity. This is so that we don't get too many false-positives, while at the same time don't miss any real mutations. In the last couple of years deep convolutional neural networks have really made a splash in variant calling, where now images are created almost similar to those we see from alignment viewers, and those images are used to train, and then have the neural network make the call on whether there is a mutation in a given section of the alignment map as we make our way down the entire map.
 
@@ -42,7 +42,7 @@ Creating the mapped genome from the Kent, UK outbreak is done the exact same way
 
 Bayesian variant callers are fairly simple to install, whereas the DCNN callers will need, in our case, Nvidia cuda drivers, and of course a machine with those GPUs. You could use [Magnolia](https://magnolia.sh/) Fig 3., the super-cool neural network based caller that Leo van Driel helped write B-), but for this post we are going to use the built-in caller that comes with [*samtools*](http://www.htslib.org/download/) written by the previously mentioned Heng Li.
 
-    bcftools mpileup -Ou -f <ref.fasta> <sample1.bam> | bcftools call -vmO z -o <study.vcf.gz>
+    bcftools mpileup -Ou -f <ref.fasta> <sample1.bam> | bcftools call -vmO z -o <study.vcf.gz>
 
 After running any variant caller, we're left with a *vcf* file, which is just a list of positions in a genome where the sample has a mutation compared to the reference, it might be good to just look at the file [format specifications](https://samtools.github.io/hts-specs/VCFv4.2.pdf) to understand how these *vcf* files will be used moving forward. We can use the allotted fields in the *vcf* format to annotate, that is give meaning & context to each of the mutations we detect in the genome. For this sample we've used [SnpEff](https://pcingola.github.io/SnpEff/users_of_snpeff/) which makes life super easy by boiling all of the predicted effects of each of the mutations we detected into 3 simple categories, high impact, low, and moderate. 
 
