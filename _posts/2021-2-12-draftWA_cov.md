@@ -29,7 +29,7 @@ BWA takes **fastq** files containing samples, along with a *fasta* file containi
 #### Fig 3. Detecting Mutations with Neural Network
 {% include youtubePlayer.html id=page.youtubeId %}
 
-But before going on to variant calling this first sample let's just prepare another sample while we're making these alignment maps. Let's do a more recent outbreak, from Kent, UK; which is far from Wuhan & the Washington sample, in both time & space. Retriving the samples from the European Nucleotide Archive can be done from this [link](https://www.ebi.ac.uk/ena/browser/view/ERR4659819)or from the shell. 
+But before going on to variant calling this first sample let's just prepare another sample while we're making these alignment maps. Let's do a more recent outbreak, from Kent, UK; which is far from Wuhan & the Washington sample, in both time & space. Retriving the samples from the European Nucleotide Archive can be done from this [link](https://www.ebi.ac.uk/ena/browser/view/ERR4659819) or from the shell. 
 
     git clone https://github.com/enasequence/enaBrowserTools.git
     cd python3
@@ -46,7 +46,7 @@ Bayesian variant callers are fairly simple to install, whereas the DCNN callers 
 
 After running any variant caller, we're left with a *vcf* file, which is just a list of positions in a genome where the sample has a mutation compared to the reference, it might be good to just look at the file [format specifications](https://samtools.github.io/hts-specs/VCFv4.2.pdf) to understand how these *vcf* files will be used moving forward. We can use the alloted fields in the *vcf* format to annotate, that is give meaning & context to each of the mutations we detect in the genome. For this sample we've used [SnpEff](https://pcingola.github.io/SnpEff/users_of_snpeff/) which makes life super easy by boiling all of the predicted effects of each of the mutations we detected into 3 simple catagories, high impact, low, and moderate. 
 
-We can see in Fig 4. that running a standard bayesian variant caller we detected a total of 48 mutations in the Kent UK sample. However, there might be some false-positives in there, it's always better to be a bit more sensitive than to miss things. Let's focus on the high impact mutations, things that will change the 3D structure of coronavirus. Looks like we only have 3 of those, all highlighted in red, at genomic positions, 11288, 27972, and 28270. The VCF file we generated also contains data on which amino acids withing the protein structure were changed to what, we can use that information to make the changes in our molecular structure, which in this case we've done with a current tool under development.
+We can see in Fig 4. that running a standard bayesian variant caller we detected a total of 48 mutations in the Kent UK sample. However, there might be some false-positives in there, it's always better to be a bit more sensitive than to miss things. Let's focus on the high impact mutations, things that will change the 3D structure of coronavirus. Looks like we only have 3 of those, all highlighted in red, at genomic positions, 11288, 27972, and 28270. The VCF file we generated also contains data on which amino acids within the protein structure were changed to what, we can use that information to make the changes in our molecular structure, which in this case we've done with a current tool under development.
 #### Fig 5. Molecular Structure Editor
 ![Dalton PDB](/images/dalton_beta.gif "Editing Molecular Structure")
 
