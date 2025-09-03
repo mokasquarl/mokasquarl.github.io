@@ -105,11 +105,60 @@ We can now create a compact CNN embedding for each individual protein sequence, 
   std::cerr << "Wrote " << out_tsv << " with " << N << " rows.\n";
   return 0;
 ```
-3. Test for intra-bucket complexes → proteins in the same bucket are more likely to form homomers or closely related assemblies. You can start small here, validating known complexes (ribosomal proteins, polymerases, etc.).
 
-4. Expand to inter-bucket pairs → once you have confidence, test cross-bucket interactions. This is where you might discover novel or less obvious complexes.
+**Clustering Protein Structures with K-Means**  
 
-5. Layer in ML → the buckets become priors or constraints for your machine learning model: instead of feeding the model the entire proteome, you give it “likely interaction neighborhoods.”
+Let’s say we begin with a set of protein structures from a model organism,  
+$$\((x_1, x_2, \dots, x_n)\)$$, where each $$\(x_i \in \mathbb{R}^d\)$$ is a vector representation  
+—for example, an embedding of a protein chain or domain.  
+We want to group these into $$\(k\)$$ functional or structural “buckets,”  
+$$\(\mathcal{S} = \{ S_1, S_2, \dots, S_k \}\)$$,  
+so that proteins in the same bucket are structurally similar.  
+
+The objective is to minimize the within-cluster sum of squares (WCSS):  
+
+$$
+\underset{\mathcal{S}}{\arg\min} \; \sum_{i=1}^k \sum_{x \in S_i} \| x - \mu_i \|^2
+$$  
+
+Here, $$\(\mu_i\)$$ is the centroid (average embedding) of cluster $$\(S_i\)$$:  
+
+$$
+\mu_i = \frac{1}{|S_i|} \sum_{x \in S_i} x
+$$  
+
+where $$\(|S_i|\)$$ is the number of proteins in cluster $$\(S_i\)$$.  
+Intuitively, each cluster represents a structural “theme” in the proteome.  
+
+We can also view this as minimizing the average pairwise distance  
+between proteins inside each cluster:  
+
+$$
+\underset{\mathcal{S}}{\arg\min} \; \sum_{i=1}^k \frac{1}{|S_i|} \sum_{x,y \in S_i} \| x - y \|^2
+$$  
+
+with the equivalence given by:  
+
+$$
+|S_i| \sum_{x \in S_i} \| x - \mu_i \|^2
+= \tfrac{1}{2} \sum_{x,y \in S_i} \| x - y \|^2
+$$  
+
+This framing makes k-means more than an abstract algorithm:  
+it becomes a way of organizing the raw geometry of protein space,  
+turning thousands of structures into a handful of interpretable groups  
+we can later test for possible interactions.
+
+
+
+### 3. Test for intra-bucket complexes: 
+Proteins in the same bucket are more likely to form homomers or closely related assemblies. You can start small here, validating known complexes (ribosomal proteins, polymerases, etc.).
+
+### 4. Expand to inter-bucket pairs:
+Once you have confidence, test cross-bucket interactions. This is where you might discover novel or less obvious complexes.
+
+### 5. Layer in ML:
+The buckets become priors or constraints for your machine learning model: instead of feeding the model the entire proteome, you give it “likely interaction neighborhoods.”
 
 This approach we believe is similar to reducing a huge search space into manageable islands, then letting the model explore the coastlines where those islands might connect.
 
