@@ -106,12 +106,11 @@ We can now create a compact CNN embedding for each individual protein sequence, 
   return 0;
 ```
 
-**Clustering Protein Structures with K-Means**  
-
-Let’s say we begin with a set of protein structures from a model organism,  
-$$\((x_1, x_2, \dots, x_n)\)$$, where each $$\(x_i \in \mathbb{R}^d\)$$ is a vector representation  
-—for example, an embedding of a protein chain or domain.  
-We want to group these into $$\(k\)$$ functional or structural “buckets,”  
+**Why use K-Means?**  
+The simple answer is, because it's well understood and a good place to start the journey.
+If we have a set of protein structures from a model organism,  
+$$\((x_1, x_2, \dots, x_n)\)$$, where each $$\(x_i \in \mathbb{R}^d\)$$ is a vector representation of a protein chain or domain.  
+Then we can group these into $$\(k\)$$ functional or structural “buckets,”  
 $$\(\mathcal{S} = \{ S_1, S_2, \dots, S_k \}\)$$,  
 so that proteins in the same bucket are structurally similar.  
 
@@ -128,10 +127,7 @@ $$
 $$  
 
 where $$\(|S_i|\)$$ is the number of proteins in cluster $$\(S_i\)$$.  
-Intuitively, each cluster represents a structural “theme” in the proteome.  
-
-We can also view this as minimizing the average pairwise distance  
-between proteins inside each cluster:  
+Intuitively, each cluster represents a structural “theme” and can also be viewed  as minimizing the average pairwise distance between proteins inside each cluster:  
 
 $$
 \underset{\mathcal{S}}{\arg\min} \; \sum_{i=1}^k \frac{1}{|S_i|} \sum_{x,y \in S_i} \| x - y \|^2
@@ -144,12 +140,7 @@ $$
 = \tfrac{1}{2} \sum_{x,y \in S_i} \| x - y \|^2
 $$  
 
-This framing makes k-means more than an abstract algorithm:  
-it becomes a way of organizing the raw geometry of protein space,  
-turning thousands of structures into a handful of interpretable groups  
-we can later test for possible interactions.
-
-
+K-means becomes a way of organizing the raw geometry of protein space, turning thousands of structures into a handful of interpretable groups we can later test for possible interactions. But much of this may result in quatranery structures we already know about, so we need to begin testing between our buckets.
 
 ### 3. Test for intra-bucket complexes: 
 Proteins in the same bucket are more likely to form homomers or closely related assemblies. You can start small here, validating known complexes (ribosomal proteins, polymerases, etc.).
