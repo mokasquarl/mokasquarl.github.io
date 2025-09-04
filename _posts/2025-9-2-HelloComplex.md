@@ -2,7 +2,7 @@
 layout: post
 title: Mapping the Quaternary Landscape
 ---
-## Building a Machine Learning System for Protein Complex Prediction
+#### Building a Machine Learning System for Protein Complex Prediction
 
 Proteins rarely work alone. Life happens when they come together — little machines that fit and unfit, join and dissolve, like a village of parts in constant conversation. Predicting the shape of one protein has been a milestone, AlphaFold gave us a breathtaking atlas of monomer structures; predicting how they assemble into complexes feels like the next step. Most fold into shapes that only make sense once you see how they fit together with others.
 
