@@ -108,7 +108,7 @@ We can now create a compact CNN embedding for each individual protein sequence, 
 
 **Why use K-Means?**  
 The simple answer is, because it's well understood and a good place to start the journey.
-If we have a set of protein structures from a model organism, $$((x_1, x_2, \dots, x_n))$$, where each $$\(x_i \in \mathbb{R}^d\)$$ is a vector representation of a protein chain or domain. Then we can group these into $$\(k\)$$ functional or structural “buckets,” $$\(\mathcal{S} = \{ S_1, S_2, \dots, S_k \}\)$$, so that proteins in the same bucket are structurally similar.  
+If we have a set of protein structures from a model organism, $$((x_1, x_2, \dots, x_n))$$, where each $$(x_i \in \mathbb{R}^d)$$ is a vector representation of a protein chain or domain. Then we can group these into $$(k)$$ functional or structural “buckets,” $$(\mathcal{S} = \{ S_1, S_2, \dots, S_k \})$$, so that proteins in the same bucket are structurally similar.  
 
 The objective is to minimize the within-cluster sum of squares (WCSS):  
 
@@ -116,13 +116,13 @@ $$
 \underset{\mathcal{S}}{\arg\min} \; \sum_{i=1}^k \sum_{x \in S_i} \| x - \mu_i \|^2
 $$  
 
-Here, $$\(\mu_i\)$$ is the centroid (average embedding) of cluster $$\(S_i\)$$:  
+Here, $$(\mu_i)$$ is the centroid (average embedding) of cluster $$(S_i)$$:  
 
 $$
 \mu_i = \frac{1}{|S_i|} \sum_{x \in S_i} x
 $$  
 
-where $$\(|S_i|\)$$ is the number of proteins in cluster $$\(S_i\)$$.  
+where $$(|S_i|)$$ is the number of proteins in cluster $$(S_i)$$.  
 Intuitively, each cluster represents a structural “theme” and can also be viewed  as minimizing the average pairwise distance between proteins inside each cluster:  
 
 $$
