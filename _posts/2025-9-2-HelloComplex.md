@@ -8,7 +8,7 @@ Proteins rarely work alone. Life happens when they come together — little mach
 
 That’s the project the team at Jäntra has been working on: building a machine learning system for quaternary structure prediction. Instead of looking at one structure in isolation, the idea is to model how multiple structures interact, forming assemblies that actually do the work of life.
 
-![Dalton PDB](/images/dalton_beta.gif "Editing Molecular Structure")
+![Dalton PDB](/images/place_holder.png "Editing Molecular Structure")
 
 There’s no single data stream that tells the whole story. Structures from the PDB, predictions from AlphaFold, interaction maps from cryo-EM, evolutionary signals from sequences — each one is like a partial view through frosted glass. Machine learning, especially deep neural networks, gives us a way to blend these perspectives, to reason across modalities. The hard part is the scale and fluidity. Complexes can be huge, dynamic, and conditional. 
 
